@@ -24,6 +24,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased] - 2023-01-04
+
+### ADDED
+- SendTempSerial fuction.
+- monitor_speed.
+
+---
+
 ## [Unreleased] - 2023-01-03
 
 ### ADDED
