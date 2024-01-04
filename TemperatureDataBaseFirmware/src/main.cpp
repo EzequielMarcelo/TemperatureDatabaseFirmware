@@ -7,6 +7,7 @@
 //---- Scope of functions -----
 float GetTempCelsiusLM35(int adcValue);
 void SendTempSerial(unsigned long delay_ms);
+void SerialBuffering(void);
 
 //---- Initial Settings ----
 void setup() 
@@ -18,6 +19,7 @@ void setup()
 void loop() 
 {
     SendTempSerial(1000);    //Sends temperature every second
+    SerialBuffering();       //waiting for data from the serial
 }
 
 //---- Development of functions ----
@@ -40,3 +42,18 @@ void SendTempSerial(unsigned long delay_ms)
         timeLastRead = millis();
     }    
 }
+void SerialBuffering(void)
+{
+    if(Serial.available())
+    {
+        //buffer format => command:data\n
+        String buffer = Serial.readStringUntil('\n');    //similar to SerialPort.readLine in C#
+        int dataStartIndex = buffer.indexOf(':') + 1;
+
+        if(dataStartIndex)                              //check if the separator was received
+        {
+            //decode
+            Serial.println(buffer);     //Debug
+        }
+    }
+} 
