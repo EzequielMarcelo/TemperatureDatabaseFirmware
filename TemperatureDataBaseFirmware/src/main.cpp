@@ -3,17 +3,20 @@
 
 //---- Hardware Mapping ----
 #define PIN_TEMPERATURE A0
+#define LOAD_PIN 11
 
 //---- Scope of functions -----
 float GetTempCelsiusLM35(int adcValue);
 void SendTempSerial(unsigned long delay_ms);
 void SerialBuffering(void);
 void Decode(String data);
+void SelectCommand(char command, String data);
 
 //---- Initial Settings ----
 void setup() 
 {
     Serial.begin(115200);
+    pinMode(LOAD_PIN, OUTPUT);
 }
 
 //---- Main loop ----
@@ -54,14 +57,30 @@ void SerialBuffering(void)
 } 
 void Decode(String buffer)
 {
-        int dataStartIndex = buffer.indexOf(':') + 1;
+    int dataStartIndex = buffer.indexOf(':') + 1;
     char command;
     String stringData;
 
     if(dataStartIndex)                                  //check if the separator was received
-        {
+    {
         command = buffer.charAt(0);
         stringData = buffer.substring(dataStartIndex);
-        Serial.println(buffer);                        //Debug 
+        //Serial.println(buffer);                        //Debug 
+        SelectCommand(command, stringData);
     }
 } 
+void SelectCommand(char command, String data)
+{
+    switch (command)
+    {
+        case 'L':
+        {
+            int dutyCycle = data.toInt();
+            analogWrite(LOAD_PIN, dutyCycle);
+            break;
+        }
+            
+        default:
+            break;
+    }
+}

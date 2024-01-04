@@ -27,21 +27,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - 2023-01-04
 
 ### ADDED
-- Decode fuction.
+- SelectCommand function.
 
 ---
 
 ## [Unreleased] - 2023-01-04
 
 ### ADDED
-- SerialBuffering fuction.
+- Decode function.
 
 ---
 
 ## [Unreleased] - 2023-01-04
 
 ### ADDED
-- SendTempSerial fuction.
+- SerialBuffering function.
+
+---
+
+## [Unreleased] - 2023-01-04
+
+### ADDED
+- SendTempSerial function.
 - monitor_speed.
 
 ---
@@ -49,7 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - 2023-01-03
 
 ### ADDED
-- GetTempCelsius fuction.
+- GetTempCelsius function.
 - Configuration of serial communication with baud rate 115200.
 
 ---
