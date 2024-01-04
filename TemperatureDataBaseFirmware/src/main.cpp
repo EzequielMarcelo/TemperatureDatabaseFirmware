@@ -8,6 +8,7 @@
 float GetTempCelsiusLM35(int adcValue);
 void SendTempSerial(unsigned long delay_ms);
 void SerialBuffering(void);
+void Decode(String data);
 
 //---- Initial Settings ----
 void setup() 
@@ -48,12 +49,19 @@ void SerialBuffering(void)
     {
         //buffer format => command:data\n
         String buffer = Serial.readStringUntil('\n');    //similar to SerialPort.readLine in C#
+        Decode(buffer);
+    }
+} 
+void Decode(String buffer)
+{
         int dataStartIndex = buffer.indexOf(':') + 1;
+    char command;
+    String stringData;
 
-        if(dataStartIndex)                              //check if the separator was received
+    if(dataStartIndex)                                  //check if the separator was received
         {
-            //decode
-            Serial.println(buffer);     //Debug
-        }
+        command = buffer.charAt(0);
+        stringData = buffer.substring(dataStartIndex);
+        Serial.println(buffer);                        //Debug 
     }
 } 
