@@ -7,10 +7,11 @@
 
 #define LENTH_WINDOW 50
 float bufferAvg[LENTH_WINDOW];
+uint8_t dutyCycle = 0;
 
 //---- Scope of functions -----
 float GetTempCelsiusLM35(int adcValue);
-void SendTempSerial(unsigned long delay_ms);
+void SendSerialData(unsigned long delay_ms);
 void SerialBuffering(void);
 void Decode(String data);
 void SelectCommand(char command, String data);
@@ -30,7 +31,7 @@ void loop()
     int adcValue = analogRead(PIN_TEMPERATURE);
 
     UpdateCelsiusTempBuffer(GetTempCelsiusLM35(adcValue));
-    SendTempSerial(1000);    //Sends temperature every second
+    SendSerialData(1000);    //Sends temperature every second
     SerialBuffering();       //waiting for data from the serial
 }
 
@@ -58,17 +59,19 @@ float GetAverageTempCelsius()
 
     return sum/(float)LENTH_WINDOW;
 }
-void SendTempSerial(unsigned long delay_ms)
+void SendSerialData(unsigned long delay_ms)
 {
-    static unsigned long timeLastRead = 0;
+    static unsigned long timeLastSend = 0;
 
-    if((millis() - timeLastRead) >= delay_ms)
+    if((millis() - timeLastSend) >= delay_ms)
     {
         float temperature = GetAverageTempCelsius();
         
-        Serial.print("T:"); 
-        Serial.println(temperature);    
-        timeLastRead = millis();
+        Serial.print("D:"); 
+        Serial.print(temperature); 
+        Serial.print(","); 
+        Serial.println(dutyCycle);    
+        timeLastSend = millis();
     }    
 }
 void SerialBuffering(void)
@@ -100,7 +103,7 @@ void SelectCommand(char command, String data)
     {
         case 'L':
         {
-            int dutyCycle = data.toInt();
+            dutyCycle = (uint8_t)data.toInt();
             analogWrite(LOAD_PIN, dutyCycle);
             break;
         }
